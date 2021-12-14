@@ -1,0 +1,41 @@
+@model Category
+
+<h1>@Model.Name</h1>
+<a href="/category/delete/@Model.CategoryId" class="btn btn-danger">Delete</a>
+
+<div class="text-center row">
+
+    <div class="col-6">
+        <h2>Products</h2>
+        <ul>
+            @{
+                foreach(Association a in Model.CategoryList)
+                {
+                    <li>@a.Product.Name<a href="/delete/asso/@Model.CategoryId/@a.Product.ProductId"> - X</a></li>
+                }
+            }
+        </ul>
+        
+    </div>
+    <div class="col-5">
+        <h4>Add Product:</h4>
+        <form action="/addtoCategory" method="post">
+            <div class="form-group">
+                <label>Give Product a Category</label>
+                <select name="ProductId"  class="form-control col-4">
+                    @{
+                        foreach (Product c in ViewBag.allProducts)
+                        {
+                            if(!Model.CategoryList.Any(s => s.ProductId == c.ProductId))
+                            {
+                                <option value="@c.ProductId">@c.Name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <input type="hidden" name="CategoryId" value="@Model.CategoryId">
+            <input type="submit" value="Add" class="btn btn-info">
+        </form>
+    </div>
+</div>
